@@ -8,6 +8,7 @@ import {
 	View,
 	TouchableOpacity,
 	Image,
+	Pressable,
 	ViewPropTypes
 } from 'react-native';
 
@@ -26,8 +27,11 @@ export default class VirtualKeyboard extends Component {
 		backspaceImg: PropTypes.number,
 		applyBackspaceTint: PropTypes.bool,
 		decimal: PropTypes.bool,
+		style: ViewPropTypes.style,
 		rowStyle: ViewPropTypes.style,
 		cellStyle: ViewPropTypes.style,
+		pressableStyle: ViewPropTypes.style,
+		pressedStyle: ViewPropTypes.style,
 		clearOnLongPress: PropTypes.bool,
 	}
 
@@ -64,11 +68,13 @@ export default class VirtualKeyboard extends Component {
 
 	Backspace() {
 		return (
-			<TouchableOpacity accessibilityLabel='backspace' style={styles.backspace} onPress={() => { this.onPress(BACK) }}
-				onLongPress={() => { if(this.props.clearOnLongPress) this.onPress(CLEAR) }}
-			>
-				<Image source={this.props.backspaceImg} resizeMode='contain' style={this.props.applyBackspaceTint && ({ tintColor: this.props.color })} />
-			</TouchableOpacity>
+			<View style={styles.backspace} accessibilityLabel='backspace'>
+				<Pressable style={({ pressed }) => [this.props.pressableStyle, pressed && this.props.pressedStyle]} onPress={() => { this.onPress(BACK) }}
+					onLongPress={() => { if(this.props.clearOnLongPress) this.onPress(CLEAR) }}
+				>
+					<Image source={this.props.backspaceImg} resizeMode='contain' style={this.props.applyBackspaceTint && ({ tintColor: this.props.color })} />
+				</Pressable>
+			</View>
 		);
 	}
 
@@ -83,9 +89,11 @@ export default class VirtualKeyboard extends Component {
 
 	Cell(symbol) {
 		return (
-			<TouchableOpacity style={[styles.cell, this.props.cellStyle]} key={symbol} accessibilityLabel={symbol.toString()} onPress={() => { this.onPress(symbol.toString()) }}>
-				<Text style={[styles.number, { color: this.props.color }]}>{symbol}</Text>
-			</TouchableOpacity>
+			<View style={[styles.cell,  this.props.cellStyle]} key={symbol} accessibilityLabel={symbol.toString()}>
+				<Pressable style={({ pressed }) => [this.props.pressableStyle, pressed && this.props.pressedStyle]} onPress={() => { this.onPress(symbol.toString()) }}>
+					<Text style={[styles.number, { color: this.props.color }]}>{symbol}</Text>
+				</Pressable>
+			</View>
 		);
 	}
 
