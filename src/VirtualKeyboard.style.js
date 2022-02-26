@@ -14,7 +14,7 @@ export default StyleSheet.create({
 	},
 	number: {
 		fontSize: 25,
-		fontWeight: '600',
+		fontWeight: '500',
 		textAlign: 'center',
 	},
 	backspace: {
