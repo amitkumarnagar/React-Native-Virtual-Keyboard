@@ -23,6 +23,7 @@ export default class VirtualKeyboard extends Component {
 	static propTypes = {
 		pressMode: PropTypes.oneOf(['string', 'char']),
 		color: PropTypes.string,
+		maxLength: PropTypes.number,
 		onPress: PropTypes.func.isRequired,
 		backspaceImg: PropTypes.number,
 		applyBackspaceTint: PropTypes.bool,
@@ -106,9 +107,11 @@ export default class VirtualKeyboard extends Component {
 				} else if (val === CLEAR) {
 					curText = "";
 				} else {
+					if(this.props.maxLength && curText.length >= this.props.maxLength) return;
 					curText += val;
 				}
 			} else {
+				if(this.props.maxLength && curText.length >= this.props.maxLength) return;
 				curText += val;
 			}
 			this.setState({ text: curText });
