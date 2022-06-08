@@ -34,6 +34,7 @@ export default class VirtualKeyboard extends Component {
 		pressableStyle: ViewPropTypes.style,
 		pressedStyle: ViewPropTypes.style,
 		clearOnLongPress: PropTypes.bool,
+		preventMultipleDecimal?: PropTypes.bool
 	}
 
 	static defaultProps = {
@@ -112,6 +113,7 @@ export default class VirtualKeyboard extends Component {
 				}
 			} else {
 				if(this.props.maxLength && curText.length >= this.props.maxLength) return;
+				if(this.props.preventMultipleDecimal && curText.includes('.') && val === '.') return;
 				curText += val;
 			}
 			this.setState({ text: curText });
