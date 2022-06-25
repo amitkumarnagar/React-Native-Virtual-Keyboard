@@ -103,6 +103,7 @@ export default class VirtualKeyboard extends Component {
 		if (this.props.pressMode === PRESS_MODE_STRING) {
 			let curText = this.state.text;
 			if(curText.length === 0 && val === '.') return;
+			if(curText.length > 0 && val === '.' && curText.indexOf('.') > -1) return;
 			if (isNaN(val)) {
 				if (val === BACK) {
 					curText = curText.slice(0, -1);
