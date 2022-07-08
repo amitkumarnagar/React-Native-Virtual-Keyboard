@@ -34,7 +34,8 @@ export default class VirtualKeyboard extends Component {
 		pressableStyle: ViewPropTypes.style,
 		pressedStyle: ViewPropTypes.style,
 		clearOnLongPress: PropTypes.bool,
-		preventMultipleDecimal: PropTypes.bool
+		preventMultipleDecimal: PropTypes.bool,
+		isCalculator: PropTypes.bool
 	}
 
 	static defaultProps = {
@@ -43,7 +44,7 @@ export default class VirtualKeyboard extends Component {
 		backspaceImg: require('./backspace.png'),
 		applyBackspaceTint: true,
 		decimal: false,
-		clearOnLongPress: false,
+		clearOnLongPress: false
 	}
 
 	constructor(props) {
@@ -102,8 +103,8 @@ export default class VirtualKeyboard extends Component {
 	onPress(val) {
 		if (this.props.pressMode === PRESS_MODE_STRING) {
 			let curText = this.state.text;
-			if(curText.length === 0 && val === '.') return;
-			if(curText === '0' && val === '0') return;
+			if(curText.length === 0 && val === '.') curText += '0.';
+			if(this.props.isCalculator && curText === '0' && val === '0') return;
 			if(curText.length > 0 && val === '.' && curText.indexOf('.') > -1) return;
 			if (isNaN(val)) {
 				if (val === BACK) {
@@ -119,7 +120,7 @@ export default class VirtualKeyboard extends Component {
 				if(this.props.preventMultipleDecimal && curText.includes('.') && val === '.') return;
 				curText += val;
 			}
-			if(curText !== '0' && !curText.startsWith('0.')) curText = curText.replace(/^0+/, '');;
+			if(this.props.isCalculator && curText !== '0' && !curText.startsWith('0.')) curText = curText.replace(/^0+/, '');
 			this.setState({ text: curText });
 			this.props.onPress(curText);
 		} else /* if (props.pressMode == 'char')*/ {
